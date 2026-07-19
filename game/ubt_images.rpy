@@ -28,15 +28,21 @@ init -1 python:
 
     # Framed tool tile: rounded card, illustration above a colored caption bar.
     # Fixed 170x130 box so drag/drop hit-detection and shelf/tray spacing stay valid.
-    def ubt_tool_tile(name, label_text, color, w=170, h=130, cap=32):
+    def ubt_tool_tile(name, label_text, color, w=170, h=130, cap=44):
         return Fixed(
             rbox("#1e3a3a", w, h),                                       # rounded ink border
             rbox("#FAFAFA", w - 6, h - 6, xpos=3, ypos=3),              # rounded white face
-            Transform("images/tools/tool_" + name + ".png", fit="contain",
-                      xysize=(w - 20, h - cap - 16), xpos=10, ypos=7),
+            Fixed(
+                Transform("images/tools/tool_" + name + ".png", fit="contain",
+                          xysize=(w - 24, h - cap - 17), align=(0.5, 0.5)),
+                xysize=(w - 24, h - cap - 17), xpos=12, ypos=7,
+            ),
             rbox(color, w - 12, cap, xpos=6, ypos=h - cap - 5, border=14),
-            Text(label_text, size=15, color="#ffffff", bold=True,
-                 text_align=0.5, xalign=0.5, ypos=h - cap - 1, xmaximum=w - 16),
+            Fixed(
+                Text(label_text, size=13, color="#ffffff", bold=True,
+                     text_align=0.5, xalign=0.5, yalign=0.5, xmaximum=w - 24),
+                xysize=(w - 12, cap), xpos=6, ypos=h - cap - 5,
+            ),
             xysize=(w, h),
         )
 
@@ -45,7 +51,7 @@ init -1 python:
         return Fixed(
             rbox("#2a7a7a", w, h, alpha=0.35),
             rbox("#2a7a7a", w - 10, h - 10, alpha=0.85, xpos=5, ypos=5),
-            Text("⬇ " + label_text, size=22, color="#ffffff", bold=True,
+            Text("⬇ " + __(label_text), size=22, color="#ffffff", bold=True,
                  text_align=0.5, xalign=0.5, yalign=0.5, xmaximum=w - 16),
             xysize=(w, h),
         )

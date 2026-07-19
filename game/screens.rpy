@@ -365,11 +365,22 @@ screen main_menu():
         padding (36, 18)
         hbox:
             spacing 26
-            textbutton "▶  Start" style "ubt_nav_button" text_size 32 action Start()
-            textbutton "Preferences" style "ubt_nav_button" action ShowMenu("preferences")
-            textbutton "About" style "ubt_nav_button" action ShowMenu("about")
-            textbutton "Help" style "ubt_nav_button" action ShowMenu("help")
-            textbutton "Quit" style "ubt_nav_button" action Quit(confirm=False)
+            textbutton _("▶  Start") style "ubt_nav_button" text_size 32 action Start()
+            textbutton _("Preferences") style "ubt_nav_button" action ShowMenu("preferences")
+            textbutton _("About") style "ubt_nav_button" action ShowMenu("about")
+            textbutton _("Help") style "ubt_nav_button" action ShowMenu("help")
+            textbutton _("Quit") style "ubt_nav_button" action Quit(confirm=False)
+
+    ## Language toggle (top-right corner).
+    frame:
+        background rpanel("#1e3a3a", alpha=0.60)
+        xalign 0.985
+        ypos 20
+        padding (14, 10)
+        hbox:
+            spacing 12
+            textbutton "EN" style "ubt_nav_button" text_size 22 action Language(None)
+            textbutton "ID" style "ubt_nav_button" text_size 22 action Language("indonesian")
 
     if gui.show_name:
 
@@ -763,6 +774,12 @@ screen preferences():
                     textbutton _("Unseen Text") action Preference("skip", "toggle")
                     textbutton _("After Choices") action Preference("after choices", "toggle")
                     textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
+
+                vbox:
+                    style_prefix "radio"
+                    label _("Language")
+                    textbutton "English" action Language(None)
+                    textbutton "Bahasa Indonesia" action Language("indonesian")
 
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
                 ## added here, to add additional creator-defined preferences.

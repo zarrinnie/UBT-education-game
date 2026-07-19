@@ -44,18 +44,18 @@ label scene_assessment:
         "Look at the vitals. Is this postpartum hemorrhage (PPH)?"
 
         "Yes — blood loss over 500mL with signs of shock.":
-            call screen feedback(True, "Correct",
-                "Blood loss above 500mL after vaginal delivery is PPH. Her fast heart rate, low blood pressure and pale, clammy skin mean she is going into shock. Act now.")
+            call screen feedback(True, _("Correct"),
+                _("Blood loss above 500mL after vaginal delivery is PPH. Her fast heart rate, low blood pressure and pale, clammy skin mean she is going into shock. Act now."))
 
         "No — this is normal postpartum bleeding.":
-            $ deduct_score("Assessment: mistook PPH for normal bleeding. More than 500mL after vaginal delivery, with signs of shock, is PPH.", 10)
-            call screen feedback(False, "Incorrect",
-                "This is not normal. Blood loss above 500mL after vaginal delivery is PPH — and her fast heart rate, low blood pressure and clammy skin are signs of shock.")
+            $ deduct_score(__("Assessment: mistook PPH for normal bleeding. More than 500mL after vaginal delivery, with signs of shock, is PPH."), 10)
+            call screen feedback(False, _("Incorrect"),
+                _("This is not normal. Blood loss above 500mL after vaginal delivery is PPH — and her fast heart rate, low blood pressure and clammy skin are signs of shock."))
 
         "Unsure — wait and observe.":
-            $ deduct_score("Assessment: waited instead of acting. Delay costs lives in PPH — recognise and act immediately.", 10)
-            call screen feedback(False, "Incorrect",
-                "There is no time to wait. Blood loss above 500mL with signs of shock is PPH. Every minute of delay increases the danger to the mother's life.")
+            $ deduct_score(__("Assessment: waited instead of acting. Delay costs lives in PPH — recognise and act immediately."), 10)
+            call screen feedback(False, _("Incorrect"),
+                _("There is no time to wait. Blood loss above 500mL with signs of shock is PPH. Every minute of delay increases the danger to the mother's life."))
 
     hide screen vitals_button
     hide screen vitals_popup
@@ -71,18 +71,18 @@ label scene_call_for_help:
         "What do you do first?"
 
         "Shout for help and call the emergency team.":
-            call screen feedback(True, "Correct",
-                "PPH is a team emergency. Call for help first — you need extra hands for medication, monitoring, and preparing equipment while you stay with the patient.")
+            call screen feedback(True, _("Correct"),
+                _("PPH is a team emergency. Call for help first — you need extra hands for medication, monitoring, and preparing equipment while you stay with the patient."))
 
         "Insert the balloon immediately, by yourself.":
-            $ deduct_score("First response: tried to manage PPH alone. Always call the team first — PPH management needs several people working together.", 10)
-            call screen feedback(False, "Incorrect",
-                "Never manage PPH alone. Call for help first — one person cannot give drugs, monitor vitals, prepare equipment and perform the procedure at the same time.")
+            $ deduct_score(__("First response: tried to manage PPH alone. Always call the team first — PPH management needs several people working together."), 10)
+            call screen feedback(False, _("Incorrect"),
+                _("Never manage PPH alone. Call for help first — one person cannot give drugs, monitor vitals, prepare equipment and perform the procedure at the same time."))
 
         "Quietly recheck her blood pressure.":
-            $ deduct_score("First response: rechecked BP instead of calling for help. The diagnosis is already clear — escalate immediately.", 10)
-            call screen feedback(False, "Incorrect",
-                "The vitals already tell the story. Rechecking wastes precious minutes — call the emergency team immediately, then continue monitoring.")
+            $ deduct_score(__("First response: rechecked BP instead of calling for help. The diagnosis is already clear — escalate immediately."), 10)
+            call screen feedback(False, _("Incorrect"),
+                _("The vitals already tell the story. Rechecking wastes precious minutes — call the emergency team immediately, then continue monitoring."))
 
     dr "The team is here. Uterotonics haven't stopped the bleeding — the uterus is atonic. We need a uterine balloon tamponade."
     jump scene_equipment_prep
@@ -136,14 +136,14 @@ label proc_inflate:
     if 250 <= inflate_volume <= 500:
         return
     elif inflate_volume < 250:
-        $ deduct_score("Inflation: under-inflated the balloon (%dmL). 250–500mL is needed for effective tamponade." % inflate_volume, 5)
-        call screen feedback(False, "Under-inflated",
-            "With less than 250mL, the balloon cannot press firmly against the uterine wall — the bleeding will continue. Draw up more saline and try again.")
+        $ deduct_score(__("Inflation: under-inflated the balloon (%dmL). 250–500mL is needed for effective tamponade.") % inflate_volume, 5)
+        call screen feedback(False, _("Under-inflated"),
+            _("With less than 250mL, the balloon cannot press firmly against the uterine wall — the bleeding will continue. Draw up more saline and try again."))
         jump proc_inflate
     else:
-        $ deduct_score("Inflation: over-inflated the balloon (%dmL). More than 500mL risks uterine injury." % inflate_volume, 5)
-        call screen feedback(False, "Over-inflated",
-            "More than 500mL over-distends the uterus and risks rupture or balloon failure. Release some saline and try again.")
+        $ deduct_score(__("Inflation: over-inflated the balloon (%dmL). More than 500mL risks uterine injury.") % inflate_volume, 5)
+        call screen feedback(False, _("Over-inflated"),
+            _("More than 500mL over-distends the uterus and risks rupture or balloon failure. Release some saline and try again."))
         jump proc_inflate
 
 
@@ -156,18 +156,18 @@ label scene_assessment_check:
         "The balloon is in place. What do you check now?"
 
         "Check whether the bleeding has stopped — the tamponade test.":
-            call screen feedback(True, "Correct",
-                "If bleeding stops or slows markedly after inflation, the tamponade test is positive — the balloon is working. If bleeding continues, she needs escalation.")
+            call screen feedback(True, _("Correct"),
+                _("If bleeding stops or slows markedly after inflation, the tamponade test is positive — the balloon is working. If bleeding continues, she needs escalation."))
 
         "Deflate the balloon to check underneath.":
-            $ deduct_score("Post-insertion: deflated the balloon immediately. It must stay inflated for 24–48 hours to control the bleeding.", 10)
-            call screen feedback(False, "Incorrect",
-                "Never deflate the balloon right after insertion — it must stay inflated for 24–48 hours. Instead, check whether visible bleeding has stopped: the tamponade test.")
+            $ deduct_score(__("Post-insertion: deflated the balloon immediately. It must stay inflated for 24–48 hours to control the bleeding."), 10)
+            call screen feedback(False, _("Incorrect"),
+                _("Never deflate the balloon right after insertion — it must stay inflated for 24–48 hours. Instead, check whether visible bleeding has stopped: the tamponade test."))
 
         "Give more oxytocin and wait.":
-            $ deduct_score("Post-insertion: relied on oxytocin alone instead of doing the tamponade test first.", 5)
-            call screen feedback(False, "Partially right",
-                "Uterotonics do continue alongside UBT — but first you must confirm the balloon is working. Check whether the bleeding has stopped: the tamponade test.")
+            $ deduct_score(__("Post-insertion: relied on oxytocin alone instead of doing the tamponade test first."), 5)
+            call screen feedback(False, _("Partially right"),
+                _("Uterotonics do continue alongside UBT — but first you must confirm the balloon is working. Check whether the bleeding has stopped: the tamponade test."))
 
     dr "Bleeding has stopped — tamponade test positive. Well done. Now she needs close monitoring."
     jump scene_monitoring
@@ -194,10 +194,10 @@ label scene_quiz:
         $ q = QUIZ_QUESTIONS[quiz_index]
         call screen quiz_screen(quiz_index)
         if _return == q["correct"]:
-            call screen feedback(True, "Correct", q["explain"])
+            call screen feedback(True, _("Correct"), q["explain"])
         else:
-            $ deduct_score("Quiz Q%d: %s" % (quiz_index + 1, q["fix"]), 5)
-            call screen feedback(False, "Incorrect", q["explain"])
+            $ deduct_score(__("Quiz Q%d: %s") % (quiz_index + 1, __(q["fix"])), 5)
+            call screen feedback(False, _("Incorrect"), q["explain"])
         $ quiz_index += 1
 
     jump scene_results

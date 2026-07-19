@@ -27,10 +27,10 @@ init -2 python:
 
     def grade_for(score):
         if score >= 90:
-            return "Expert"
+            return _("Expert")
         if score >= 70:
-            return "Competent"
-        return "Needs Review"
+            return _("Competent")
+        return _("Needs Review")
 
     def grade_color(score):
         if score >= 90:
@@ -57,23 +57,23 @@ init -2 python:
     CORRECT_TOOLS = ["ubt_catheter", "syringe", "iv_saline", "speculum", "clamps", "gloves"]
 
     TOOL_LABELS = {
-        "ubt_catheter": "UBT Balloon Catheter",
-        "syringe": "50mL Syringe",
-        "iv_saline": "500mL IV Normal Saline",
-        "speculum": "Speculum",
-        "clamps": "Clamps ×2",
-        "gloves": "Sterile Gloves",
-        "forceps": "Forceps",
-        "episiotomy": "Episiotomy Scissors",
-        "suture_kit": "Suture Kit",
-        "foley": "Foley Catheter",
+        "ubt_catheter": _("UBT Balloon Catheter"),
+        "syringe": _("50mL Syringe"),
+        "iv_saline": _("500mL IV Normal Saline"),
+        "speculum": _("Speculum"),
+        "clamps": _("Clamps ×2"),
+        "gloves": _("Sterile Gloves"),
+        "forceps": _("Forceps"),
+        "episiotomy": _("Episiotomy Scissors"),
+        "suture_kit": _("Suture Kit"),
+        "foley": _("Foley Catheter"),
     }
 
     DISTRACTOR_INFO = {
-        "forceps": "Forceps are used for assisted delivery — they are not needed for balloon tamponade.",
-        "episiotomy": "Episiotomy scissors are used during delivery, not for managing PPH with a balloon.",
-        "suture_kit": "A suture kit repairs tears and lacerations. UBT treats bleeding from an atonic uterus.",
-        "foley": "A Foley catheter drains the bladder — its small balloon (about 30mL) cannot tamponade the uterus. You need the UBT balloon catheter, which holds 250–500mL.",
+        "forceps": _("Forceps are used for assisted delivery — they are not needed for balloon tamponade."),
+        "episiotomy": _("Episiotomy scissors are used during delivery, not for managing PPH with a balloon."),
+        "suture_kit": _("A suture kit repairs tears and lacerations. UBT treats bleeding from an atonic uterus."),
+        "foley": _("A Foley catheter drains the bladder — its small balloon (about 30mL) cannot tamponade the uterus. You need the UBT balloon catheter, which holds 250–500mL."),
     }
 
     ## Shelf mixes correct tools and distractors.
@@ -118,8 +118,8 @@ init -2 python:
             pos = shelf_pos(name)
             if on_tray:
                 msg = DISTRACTOR_INFO[name]
-                deduct_score("Equipment: chose %s. %s" % (TOOL_LABELS[name], msg), 5)
-                renpy.show_screen("feedback", False, "Wrong tool", msg, Hide("feedback"))
+                deduct_score(__("Equipment: chose %s. %s") % (__(TOOL_LABELS[name]), __(msg)), 5)
+                renpy.show_screen("feedback", False, _("Wrong tool"), msg, Hide("feedback"))
 
         new_pos = dict(store.tool_pos)
         new_pos[name] = pos
@@ -135,20 +135,20 @@ init -2 python:
     ## target_pos values are absolute screen coordinates over the patient
     ## diagram (drawn at 120, 180) or the connector inset (step 3).
     PROC_STEPS = [
-        {"tool": "speculum", "title": "Step 1 — Insert the speculum",
-         "target": "Vaginal opening", "target_pos": (330, 640),
-         "hint": "Use the speculum first — you must see the cervix before inserting anything."},
-        {"tool": "ubt_catheter", "title": "Step 2 — Insert the UBT catheter",
-         "target": "Uterine cavity", "target_pos": (330, 300),
-         "hint": "Insert the UBT balloon catheter through the cervix into the uterine cavity."},
-        {"tool": "syringe", "title": "Step 3 — Connect the syringe",
-         "target": "Inflation port", "target_pos": (1090, 360),
-         "hint": "Connect the 50mL syringe to the catheter's inflation port (enlarged on the right)."},
-        {"tool": None, "title": "Step 4 — Inflate the balloon",
+        {"tool": "speculum", "title": _("Step 1 — Insert the speculum"),
+         "target": _("Vaginal opening"), "target_pos": (330, 640),
+         "hint": _("Use the speculum first — you must see the cervix before inserting anything.")},
+        {"tool": "ubt_catheter", "title": _("Step 2 — Insert the UBT catheter"),
+         "target": _("Uterine cavity"), "target_pos": (330, 300),
+         "hint": _("Insert the UBT balloon catheter through the cervix into the uterine cavity.")},
+        {"tool": "syringe", "title": _("Step 3 — Connect the syringe"),
+         "target": _("Inflation port"), "target_pos": (1090, 360),
+         "hint": _("Connect the 50mL syringe to the catheter's inflation port (enlarged on the right).")},
+        {"tool": None, "title": _("Step 4 — Inflate the balloon"),
          "target": None, "target_pos": None, "hint": None},   # slider step, no drag
-        {"tool": "clamps", "title": "Step 5 — Clamp the catheter",
-         "target": "Catheter tube", "target_pos": (330, 700),
-         "hint": "Clamp the catheter tube to keep the saline in and lock the balloon in place."},
+        {"tool": "clamps", "title": _("Step 5 — Clamp the catheter"),
+         "target": _("Catheter tube"), "target_pos": (330, 700),
+         "hint": _("Clamp the catheter tube to keep the saline in and lock the balloon in place.")},
     ]
 
     PROC_STEP_OF_TOOL = {"speculum": 0, "ubt_catheter": 1, "syringe": 2, "clamps": 4}
@@ -186,12 +186,12 @@ init -2 python:
         if name in DISTRACTOR_INFO:
             why = DISTRACTOR_INFO[name]
         else:
-            why = "That tool is needed later, not now."
-        deduct_score("Procedure step %d: used %s instead of %s." %
-                     (step + 1, TOOL_LABELS[name], TOOL_LABELS[correct]), 5)
+            why = _("That tool is needed later, not now.")
+        deduct_score(__("Procedure step %d: used %s instead of %s.") %
+                     (step + 1, __(TOOL_LABELS[name]), __(TOOL_LABELS[correct])), 5)
         renpy.show_screen("red_flash")
-        renpy.show_screen("feedback", False, "Wrong tool",
-                          PROC_STEPS[step]["hint"] + "\n\n" + why, Hide("feedback"))
+        renpy.show_screen("feedback", False, _("Wrong tool"),
+                          __(PROC_STEPS[step]["hint"]) + "\n\n" + __(why), Hide("feedback"))
         pos = proc_shelf_pos(name)
         tool.snap(pos[0], pos[1], 0.3)
         renpy.restart_interaction()
@@ -202,11 +202,11 @@ init -2 python:
     ## ------------------------------------------------------------------
 
     MONITOR_ITEMS = [
-        "Vital signs every 15 minutes",
-        "Uterine fundus — height and tone",
-        "Vaginal blood loss",
-        "Urine output",
-        "Document procedure time and balloon volume",
+        _("Vital signs every 15 minutes"),
+        _("Uterine fundus — height and tone"),
+        _("Vaginal blood loss"),
+        _("Urine output"),
+        _("Document procedure time and balloon volume"),
     ]
 
     def toggle_monitor(i):
@@ -221,41 +221,41 @@ init -2 python:
 
     QUIZ_QUESTIONS = [
         {
-            "q": "What volume of saline is used to inflate a UBT balloon?",
-            "options": ["50–100mL", "250–500mL", "1000mL", "750mL"],
+            "q": _("What volume of saline is used to inflate a UBT balloon?"),
+            "options": [_("50–100mL"), _("250–500mL"), _("1000mL"), _("750mL")],
             "correct": 1,
-            "explain": "The UBT balloon is inflated with 250–500mL of normal saline — enough to press firmly against the uterine wall without over-distending it.",
-            "fix": "UBT balloon volume is 250–500mL of saline.",
+            "explain": _("The UBT balloon is inflated with 250–500mL of normal saline — enough to press firmly against the uterine wall without over-distending it."),
+            "fix": _("UBT balloon volume is 250–500mL of saline."),
         },
         {
-            "q": "After insertion, how long should the balloon remain before deflation?",
-            "options": ["30 minutes", "2–4 hours", "24–48 hours", "1 week"],
+            "q": _("After insertion, how long should the balloon remain before deflation?"),
+            "options": [_("30 minutes"), _("2–4 hours"), _("24–48 hours"), _("1 week")],
             "correct": 2,
-            "explain": "The balloon stays in place for 24–48 hours, then is deflated gradually while watching for re-bleeding.",
-            "fix": "The balloon remains 24–48 hours before staged deflation.",
+            "explain": _("The balloon stays in place for 24–48 hours, then is deflated gradually while watching for re-bleeding."),
+            "fix": _("The balloon remains 24–48 hours before staged deflation."),
         },
         {
-            "q": "PPH is defined as blood loss of more than _____ mL after vaginal delivery.",
-            "options": ["250mL", "500mL", "1000mL", "100mL"],
+            "q": _("PPH is defined as blood loss of more than _____ mL after vaginal delivery."),
+            "options": [_("250mL"), _("500mL"), _("1000mL"), _("100mL")],
             "correct": 1,
-            "explain": "PPH is blood loss over 500mL after vaginal delivery (or over 1000mL after caesarean section).",
-            "fix": "PPH is more than 500mL blood loss after vaginal delivery.",
+            "explain": _("PPH is blood loss over 500mL after vaginal delivery (or over 1000mL after caesarean section)."),
+            "fix": _("PPH is more than 500mL blood loss after vaginal delivery."),
         },
         {
-            "q": "Which of the following is a contraindication to UBT?",
-            "options": ["Placenta previa", "Atonic uterus", "Uterine rupture", "Cervical dilation"],
+            "q": _("Which of the following is a contraindication to UBT?"),
+            "options": [_("Placenta previa"), _("Atonic uterus"), _("Uterine rupture"), _("Cervical dilation")],
             "correct": 2,
-            "explain": "UBT must not be used with uterine rupture — the balloon cannot control bleeding through a torn uterine wall and delays surgery. An atonic uterus is the main indication for UBT.",
-            "fix": "Uterine rupture is a contraindication to UBT.",
+            "explain": _("UBT must not be used with uterine rupture — the balloon cannot control bleeding through a torn uterine wall and delays surgery. An atonic uterus is the main indication for UBT."),
+            "fix": _("Uterine rupture is a contraindication to UBT."),
         },
         {
-            "q": "What does 'tamponade test positive' mean?",
-            "options": ["The balloon has ruptured",
-                        "Bleeding has stopped after balloon inflation",
-                        "The patient needs immediate surgery",
-                        "The balloon is fully deflated"],
+            "q": _("What does 'tamponade test positive' mean?"),
+            "options": [_("The balloon has ruptured"),
+                        _("Bleeding has stopped after balloon inflation"),
+                        _("The patient needs immediate surgery"),
+                        _("The balloon is fully deflated")],
             "correct": 1,
-            "explain": "'Tamponade test positive' means bleeding stops (or slows markedly) after inflation — the balloon is controlling the hemorrhage.",
-            "fix": "Tamponade test positive means bleeding stopped after inflation.",
+            "explain": _("'Tamponade test positive' means bleeding stops (or slows markedly) after inflation — the balloon is controlling the hemorrhage."),
+            "fix": _("Tamponade test positive means bleeding stopped after inflation."),
         },
     ]

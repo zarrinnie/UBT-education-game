@@ -53,12 +53,14 @@ style ubt_quiz_button_text is button_text:
 style ubt_nav_button is button:
     background rpanel("#2a7a7a")
     hover_background rpanel("#3a9a9a")
+    selected_background rpanel("#3a9a9a")
     padding (30, 14)
     yalign 0.5
 
 style ubt_nav_button_text is button_text:
     color "#ffffff"
     hover_color "#E0F5F5"
+    selected_color "#FFD666"
     size 28
     bold True
 
@@ -82,7 +84,7 @@ screen score_hud():
         style "ubt_frame"
         xalign 0.985
         ypos 20
-        text "Score: [score]" style "ubt_text" size 30 bold True
+        text _("Score: [score]") style "ubt_text" size 30 bold True
 
 screen feedback(correct, title, message, continue_action=Return()):
     modal True
@@ -96,9 +98,9 @@ screen feedback(correct, title, message, continue_action=Return()):
         padding (40, 32)
         vbox:
             spacing 22
-            text (("✓  " if correct else "✗  ") + title) size 44 color "#ffffff" bold True
+            text (("✓  " if correct else "✗  ") + __(title)) size 44 color "#ffffff" bold True
             text message size 27 color "#ffffff"
-            textbutton "Continue" style "ubt_button" action continue_action xalign 1.0
+            textbutton _("Continue") style "ubt_button" action continue_action xalign 1.0
 
 transform ubt_flash_out:
     alpha 0.55
@@ -117,7 +119,7 @@ screen step_progress(stepnum):
         ypos 20
         hbox:
             spacing 14
-            text "STEP [stepnum] of 5" style "ubt_text" bold True yalign 0.5
+            text _("STEP [stepnum] of 5") style "ubt_text" bold True yalign 0.5
             for i in range(5):
                 add Solid(("#2a7a7a" if i < stepnum else "#b8d8d8"), xsize=44, ysize=16) yalign 0.5
 
@@ -136,10 +138,10 @@ screen intro_screen():
         vbox:
             spacing 28
             add "intro_cross" at ubt_pulse xalign 0.5
-            text "UBT TRAINER" size 64 bold True color "#ffffff" xalign 0.5
-            text "Uterine Balloon Tamponade — Interactive Tutorial" size 30 color "#E0F5F5" xalign 0.5
+            text _("UBT TRAINER") size 64 bold True color "#ffffff" xalign 0.5
+            text _("Uterine Balloon Tamponade — Interactive Tutorial") size 30 color "#E0F5F5" xalign 0.5
             null height 16
-            textbutton "Begin Training" style "ubt_button" action Return() xalign 0.5
+            textbutton _("Begin Training") style "ubt_button" action Return() xalign 0.5
 
 
 ## ---------------------------------------------------------------------------
@@ -150,12 +152,12 @@ screen intro_screen():
 screen vitals_info():
     vbox:
         spacing 14
-        text "PATIENT VITALS" style "ubt_text" size 30 bold True
-        text "Heart rate: 128 bpm (high)" style "ubt_text"
-        text "Blood pressure: 88/54 mmHg (low)" style "ubt_text"
-        text "Est. blood loss: ~700mL, ongoing" style "ubt_text"
-        text "Skin: pale, clammy" style "ubt_text"
-        text "Uterus: soft, poorly contracted" style "ubt_text"
+        text _("PATIENT VITALS") style "ubt_text" size 30 bold True
+        text _("Heart rate: 128 bpm (high)") style "ubt_text"
+        text _("Blood pressure: 88/54 mmHg (low)") style "ubt_text"
+        text _("Est. blood loss: ~700mL, ongoing") style "ubt_text"
+        text _("Skin: pale, clammy") style "ubt_text"
+        text _("Uterus: soft, poorly contracted") style "ubt_text"
 
 ## Side card shown while the doctor presents the vitals (hidden before choices).
 screen vitals_card():
@@ -170,7 +172,7 @@ screen vitals_card():
 ## Small button available while the choice menu is up.
 screen vitals_button():
     zorder 95
-    textbutton "▤  See patient vitals":
+    textbutton _("▤  See patient vitals"):
         style "ubt_button"
         xalign 0.985
         ypos 110
@@ -209,8 +211,8 @@ screen equipment_prep():
         ypos 20
         vbox:
             spacing 6
-            text "Prepare the equipment tray" style "ubt_title" xalign 0.5
-            text "Drag the 6 tools needed for UBT onto the sterile tray." style "ubt_text" xalign 0.5
+            text _("Prepare the equipment tray") style "ubt_title" xalign 0.5
+            text _("Drag the 6 tools needed for UBT onto the sterile tray.") style "ubt_text" xalign 0.5
 
     draggroup:
         drag:
@@ -235,10 +237,10 @@ screen equipment_prep():
         style "ubt_frame"
         xpos 80
         yalign 0.96
-        text "On tray: [len(tools_on_tray)] / 6" style "ubt_text" bold True
+        text _("On tray: [len(tools_on_tray)] / 6") style "ubt_text" bold True
 
     if len(tools_on_tray) == 6:
-        textbutton "Proceed ▶" style "ubt_button" action Return() xalign 0.97 yalign 0.96
+        textbutton _("Proceed ▶") style "ubt_button" action Return() xalign 0.97 yalign 0.96
 
 
 ## ---------------------------------------------------------------------------
@@ -256,7 +258,7 @@ screen procedure_screen(step):
         vbox:
             spacing 6
             text PROC_STEPS[step]["title"] style "ubt_title" size 34 xalign 0.5
-            text "Drag the correct tool to the highlighted target." style "ubt_text" xalign 0.5
+            text _("Drag the correct tool to the highlighted target.") style "ubt_text" xalign 0.5
 
     add "patient_diagram" xpos 120 ypos 180
 
@@ -295,11 +297,11 @@ screen inflation_slider():
         xsize 900
         vbox:
             spacing 26
-            text "Inflate the balloon" style "ubt_title"
-            text "Draw up normal saline and inflate the balloon.\nTarget: 250–500mL." style "ubt_text"
+            text _("Inflate the balloon") style "ubt_title"
+            text _("Draw up normal saline and inflate the balloon.\nTarget: 250–500mL.") style "ubt_text"
             bar value VariableValue("inflate_volume", 700) xsize 800
-            text "Volume: [inflate_volume] mL" style "ubt_text" size 34 bold True
-            textbutton "Confirm inflation" style "ubt_button" action Return()
+            text _("Volume: [inflate_volume] mL") style "ubt_text" size 34 bold True
+            textbutton _("Confirm inflation") style "ubt_button" action Return()
 
 
 ## ---------------------------------------------------------------------------
@@ -315,16 +317,16 @@ screen monitoring_checklist():
         xsize 1000
         vbox:
             spacing 18
-            text "Monitoring plan" style "ubt_title"
-            text "Select every item you will monitor while the balloon is in place:" style "ubt_text"
+            text _("Monitoring plan") style "ubt_title"
+            text _("Select every item you will monitor while the balloon is in place:") style "ubt_text"
             null height 6
             for i, item in enumerate(MONITOR_ITEMS):
-                textbutton (("☑  " if i in monitor_checked else "☐  ") + item):
+                textbutton (("☑  " if i in monitor_checked else "☐  ") + __(item)):
                     style "ubt_check_button"
                     action Function(toggle_monitor, i)
             null height 6
             if len(monitor_checked) == len(MONITOR_ITEMS):
-                textbutton "Monitoring plan confirmed ▶" style "ubt_button" action Return()
+                textbutton _("Monitoring plan confirmed ▶") style "ubt_button" action Return()
 
 
 ## ---------------------------------------------------------------------------
@@ -343,11 +345,11 @@ screen quiz_screen(index):
         xsize 1250
         vbox:
             spacing 20
-            text "Question [qnum] of [qtotal]" style "ubt_text" size 22
+            text _("Question [qnum] of [qtotal]") style "ubt_text" size 22
             text q["q"] style "ubt_title" size 34
             null height 10
             for i, opt in enumerate(q["options"]):
-                textbutton ("ABCD"[i] + ".   " + opt) style "ubt_quiz_button" action Return(i)
+                textbutton ("ABCD"[i] + ".   " + __(opt)) style "ubt_quiz_button" action Return(i)
 
 
 ## ---------------------------------------------------------------------------
@@ -363,12 +365,12 @@ screen results_screen():
         xsize 1300
         vbox:
             spacing 18
-            text "Training results" style "ubt_title"
-            text "Final score: [score] / 100" style "ubt_text" size 36 bold True
-            text ("Grade: " + grade_for(score)) size 40 bold True color grade_color(score)
+            text _("Training results") style "ubt_title"
+            text _("Final score: [score] / 100") style "ubt_text" size 36 bold True
+            text (__("Grade: ") + __(grade_for(score))) size 40 bold True color grade_color(score)
             null height 8
             if score_log:
-                text "What to review:" style "ubt_text" bold True
+                text _("What to review:") style "ubt_text" bold True
                 viewport:
                     ysize 360
                     scrollbars "vertical"
@@ -378,9 +380,9 @@ screen results_screen():
                         for reason, pts in score_log:
                             text "−[pts]   [reason]" style "ubt_text" size 24
             else:
-                text "Perfect run — no mistakes. Excellent work!" style "ubt_text" bold True color "#2d7a4f"
+                text _("Perfect run — no mistakes. Excellent work!") style "ubt_text" bold True color "#2d7a4f"
             null height 12
             hbox:
                 spacing 30
-                textbutton "Review Again" style "ubt_button" action Return("again")
-                textbutton "Exit" style "ubt_button" action Return("exit")
+                textbutton _("Review Again") style "ubt_button" action Return("again")
+                textbutton _("Exit") style "ubt_button" action Return("exit")
