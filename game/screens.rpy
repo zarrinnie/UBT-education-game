@@ -252,7 +252,6 @@ screen quick_menu():
             textbutton _("Auto") action Preference("auto-forward", "toggle")
             textbutton _("Save") action ShowMenu('save')
             textbutton _("Q.Save") action QuickSave()
-            textbutton _("Q.Load") action QuickLoad()
             textbutton _("Prefs") action ShowMenu('preferences')
 
 
@@ -307,8 +306,6 @@ screen navigation():
 
             textbutton _("Save") action ShowMenu("save")
 
-        textbutton _("Load") action ShowMenu("load")
-
         textbutton _("Preferences") action ShowMenu("preferences")
 
         if _in_replay:
@@ -342,6 +339,8 @@ style navigation_button:
 
 style navigation_button_text:
     properties gui.text_properties("navigation_button")
+    size 30
+    bold True
 
 
 ## Main Menu screen ############################################################
@@ -355,15 +354,22 @@ screen main_menu():
     ## This ensures that any other menu screen is replaced.
     tag menu
 
-    add gui.main_menu_background
+    add "main_menu_bg"
 
-    ## This empty frame darkens the main menu.
+    ## Horizontal button dock along the bottom (the in-game menu keeps the
+    ## vertical navigation screen).
     frame:
-        style "main_menu_frame"
-
-    ## The use statement includes another screen inside this one. The actual
-    ## contents of the main menu are in the navigation screen.
-    use navigation
+        background rpanel("#1e3a3a", alpha=0.60)
+        xalign 0.5
+        yalign 0.97
+        padding (36, 18)
+        hbox:
+            spacing 26
+            textbutton "▶  Start" style "ubt_nav_button" text_size 32 action Start()
+            textbutton "Preferences" style "ubt_nav_button" action ShowMenu("preferences")
+            textbutton "About" style "ubt_nav_button" action ShowMenu("about")
+            textbutton "Help" style "ubt_nav_button" action ShowMenu("help")
+            textbutton "Quit" style "ubt_nav_button" action Quit(confirm=False)
 
     if gui.show_name:
 
@@ -419,10 +425,8 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 
     style_prefix "game_menu"
 
-    if main_menu:
-        add gui.main_menu_background
-    else:
-        add gui.game_menu_background
+    add "bg clinic"
+    add Solid("#E0F5F5C8")
 
     frame:
         style "game_menu_outer_frame"
@@ -503,7 +507,7 @@ style game_menu_outer_frame:
     bottom_padding 45
     top_padding 180
 
-    background "gui/overlay/game_menu.png"
+    background None
 
 style game_menu_navigation_frame:
     xsize 420
@@ -513,6 +517,8 @@ style game_menu_content_frame:
     left_margin 60
     right_margin 30
     top_margin 15
+    background rpanel("#FAFAFA", alpha=0.93)
+    padding (40, 30)
 
 style game_menu_viewport:
     xsize 1380
@@ -718,6 +724,8 @@ style page_button_text:
 
 style slot_button:
     properties gui.button_properties("slot_button")
+    background rpanel("#ffffff", alpha=0.55)
+    hover_background rpanel("#cfeaea", alpha=0.9)
 
 style slot_button_text:
     properties gui.text_properties("slot_button")
@@ -1155,7 +1163,7 @@ screen confirm(message, yes_action, no_action):
 
     style_prefix "confirm"
 
-    add "gui/overlay/confirm.png"
+    add Solid("#00000088")
 
     frame:
 
@@ -1186,8 +1194,8 @@ style confirm_button is gui_medium_button
 style confirm_button_text is gui_medium_button_text
 
 style confirm_frame:
-    background Frame([ "gui/confirm_frame.png", "gui/frame.png"], gui.confirm_frame_borders, tile=gui.frame_tile)
-    padding gui.confirm_frame_borders.padding
+    background rpanel("#FAFAFA", alpha=0.97)
+    padding (48, 40)
     xalign .5
     yalign .5
 
@@ -1197,9 +1205,15 @@ style confirm_prompt_text:
 
 style confirm_button:
     properties gui.button_properties("confirm_button")
+    background rpanel("#2a7a7a")
+    hover_background rpanel("#3a9a9a")
+    padding (28, 12)
 
 style confirm_button_text:
     properties gui.text_properties("confirm_button")
+    color "#ffffff"
+    hover_color "#ffffff"
+    bold True
 
 
 ## Skip indicator screen #######################################################

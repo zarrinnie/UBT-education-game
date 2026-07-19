@@ -18,7 +18,8 @@ define config.name = _("UBTedugame")
 ## Determines if the title given above is shown on the main menu screen. Set
 ## this to False to hide the title.
 
-define gui.show_name = True
+## False: the main menu key art already carries the "Master the UBT" title.
+define gui.show_name = False
 
 
 ## The version of the game.

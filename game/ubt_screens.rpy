@@ -6,7 +6,7 @@
 ## ---------------------------------------------------------------------------
 
 style ubt_frame is frame:
-    background "#FAFAFAee"
+    background rpanel("#FAFAFA", alpha=0.93)
     padding (30, 24)
 
 style ubt_text is text:
@@ -19,8 +19,8 @@ style ubt_title is text:
     bold True
 
 style ubt_button is button:
-    background "#2a7a7a"
-    hover_background "#3a9a9a"
+    background rpanel("#2a7a7a")
+    hover_background rpanel("#3a9a9a")
     padding (28, 14)
 
 style ubt_button_text is button_text:
@@ -38,8 +38,8 @@ style ubt_check_button_text is button_text:
     size 28
 
 style ubt_quiz_button is button:
-    background "#e8f4f4"
-    hover_background "#cfeaea"
+    background rpanel("#e8f4f4")
+    hover_background rpanel("#cfeaea")
     xsize 1100
     padding (24, 14)
 
@@ -48,6 +48,28 @@ style ubt_quiz_button_text is button_text:
     hover_color "#1e3a3a"
     size 27
     text_align 0.0
+
+## Main menu bottom-dock buttons.
+style ubt_nav_button is button:
+    background rpanel("#2a7a7a")
+    hover_background rpanel("#3a9a9a")
+    padding (30, 14)
+    yalign 0.5
+
+style ubt_nav_button_text is button_text:
+    color "#ffffff"
+    hover_color "#E0F5F5"
+    size 28
+    bold True
+
+## Rounded in-game choice menu buttons (match the rest of the rounded UI).
+style choice_button:
+    background rpanel("#1e3a3a", alpha=0.85)
+    hover_background rpanel("#2a7a7a")
+
+style choice_button_text:
+    color "#ffffff"
+    hover_color "#ffffff"
 
 
 ## ---------------------------------------------------------------------------
@@ -65,9 +87,9 @@ screen score_hud():
 screen feedback(correct, title, message, continue_action=Return()):
     modal True
     zorder 200
-    add Solid("#00000088")
+    add Solid("#00000088") at dim_in
     frame:
-        background ("#2d7a4f" if correct else "#7a2d2d")
+        background (rpanel("#2d7a4f") if correct else rpanel("#7a2d2d"))
         xalign 0.5
         yalign 0.5
         xsize 900
@@ -106,21 +128,36 @@ screen step_progress(stepnum):
 
 screen intro_screen():
     add "bg clinic"
-    vbox:
+    frame:
+        background rpanel("#1e3a3a", alpha=0.78)
         xalign 0.5
         yalign 0.45
-        spacing 28
-        add "intro_cross" at ubt_pulse xalign 0.5
-        text "UBT TRAINER" size 64 bold True color "#ffffff" xalign 0.5
-        text "Uterine Balloon Tamponade — Interactive Tutorial" size 30 color "#E0F5F5" xalign 0.5
-        null height 16
-        textbutton "Begin Training" style "ubt_button" action Return() xalign 0.5
+        padding (70, 48)
+        vbox:
+            spacing 28
+            add "intro_cross" at ubt_pulse xalign 0.5
+            text "UBT TRAINER" size 64 bold True color "#ffffff" xalign 0.5
+            text "Uterine Balloon Tamponade — Interactive Tutorial" size 30 color "#E0F5F5" xalign 0.5
+            null height 16
+            textbutton "Begin Training" style "ubt_button" action Return() xalign 0.5
 
 
 ## ---------------------------------------------------------------------------
 ## Scene 2 — vitals card (shown alongside dialogue)
 ## ---------------------------------------------------------------------------
 
+## Shared vitals content — used by the side card and the popup.
+screen vitals_info():
+    vbox:
+        spacing 14
+        text "PATIENT VITALS" style "ubt_text" size 30 bold True
+        text "Heart rate: 128 bpm (high)" style "ubt_text"
+        text "Blood pressure: 88/54 mmHg (low)" style "ubt_text"
+        text "Est. blood loss: ~700mL, ongoing" style "ubt_text"
+        text "Skin: pale, clammy" style "ubt_text"
+        text "Uterus: soft, poorly contracted" style "ubt_text"
+
+## Side card shown while the doctor presents the vitals (hidden before choices).
 screen vitals_card():
     zorder 90
     frame:
@@ -128,14 +165,35 @@ screen vitals_card():
         xpos 1380
         ypos 140
         xsize 480
-        vbox:
-            spacing 14
-            text "PATIENT VITALS" style "ubt_text" size 30 bold True
-            text "Heart rate: 128 bpm (high)" style "ubt_text"
-            text "Blood pressure: 88/54 mmHg (low)" style "ubt_text"
-            text "Est. blood loss: ~700mL, ongoing" style "ubt_text"
-            text "Skin: pale, clammy" style "ubt_text"
-            text "Uterus: soft, poorly contracted" style "ubt_text"
+        use vitals_info
+
+## Small button available while the choice menu is up.
+screen vitals_button():
+    zorder 95
+    textbutton "▤  See patient vitals":
+        style "ubt_button"
+        xalign 0.985
+        ypos 110
+        action Show("vitals_popup")
+
+## Vitals as a popup: click anywhere outside the card to close it. The
+## full-screen dismiss button swallows every click, so `modal` is not needed
+## (and `modal True` + `renpy.pause` proved unreliable in this Ren'Py version).
+screen vitals_popup():
+    zorder 190
+    add Solid("#00000066") at dim_in
+    button:
+        xfill True
+        yfill True
+        background None
+        action Hide("vitals_popup")
+    button:
+        background rpanel("#FAFAFA", alpha=0.97)
+        xalign 0.5
+        yalign 0.5
+        padding (44, 36)
+        action NullAction()
+        use vitals_info
 
 
 ## ---------------------------------------------------------------------------
@@ -212,7 +270,7 @@ screen procedure_screen(step):
             droppable True
             xpos PROC_STEPS[step]["target_pos"][0]
             ypos PROC_STEPS[step]["target_pos"][1]
-            add ubt_drop_zone(PROC_STEPS[step]["target"])
+            add ubt_drop_zone(PROC_STEPS[step]["target"]) at target_pulse
 
         for i, name in enumerate(proc_tools_for(step)):
             drag:

@@ -18,6 +18,7 @@ label scene_intro:
     scene bg clinic
     call screen intro_screen
 
+    show nurse profile at nurse_stand with dissolve
     "You are a nurse on the maternity ward of a rural clinic."
     "Your patient, Maria, delivered a healthy baby twenty minutes ago. Suddenly, the doctor calls you urgently."
     dr "I need you here, now! Maria is bleeding heavily and it isn't slowing down."
@@ -32,8 +33,12 @@ label scene_assessment:
     scene bg exam with dissolve
     show screen score_hud
     show screen vitals_card
+    show nurse profile at nurse_stand
 
     dr "Here are her vitals. She delivered vaginally, the placenta is out and complete, and an oxytocin infusion is already running — but the bleeding continues."
+
+    hide screen vitals_card
+    show screen vitals_button
 
     menu:
         "Look at the vitals. Is this postpartum hemorrhage (PPH)?"
@@ -52,7 +57,8 @@ label scene_assessment:
             call screen feedback(False, "Incorrect",
                 "There is no time to wait. Blood loss above 500mL with signs of shock is PPH. Every minute of delay increases the danger to the mother's life.")
 
-    hide screen vitals_card
+    hide screen vitals_button
+    hide screen vitals_popup
     jump scene_call_for_help
 
 
@@ -170,6 +176,7 @@ label scene_assessment_check:
 ## SCENE 7 — MONITORING CHECKLIST #############################################
 
 label scene_monitoring:
+    show nurse writing at nurse_stand
     call screen monitoring_checklist
 
     "Monitoring plan confirmed. Maria remains stable. The balloon will stay in place for 24–48 hours, then be deflated gradually while watching for re-bleeding."
@@ -179,6 +186,7 @@ label scene_monitoring:
 ## SCENE 8 — QUIZ #############################################################
 
 label scene_quiz:
+    show nurse writing at nurse_stand
     dr "Maria is safe. Before we finish — a quick knowledge check. Five questions."
 
     $ quiz_index = 0
@@ -198,7 +206,9 @@ label scene_quiz:
 ## SCENE 9 — RESULTS ##########################################################
 
 label scene_results:
+    hide nurse
     hide screen score_hud
+    scene bg clinic with dissolve
     call screen results_screen
 
     if _return == "again":
