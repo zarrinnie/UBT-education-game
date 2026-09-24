@@ -129,3 +129,11 @@ translate indonesian strings:
     # game/ubt_screens.rpy:388
     old "Exit"
     new "Keluar"
+# TODO: Translation updated at 2026-08-12 15:11
+
+translate indonesian strings:
+
+    # game/ubt_screens.rpy:369
+    old "Difficulty: "
+    new "Tingkat kesulitan: "
+

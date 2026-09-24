@@ -7,6 +7,21 @@
 define dr = Character("Dr. Amina", color="#7fd0d0")
 
 
+## Difficulty entry points — the main menu Start button routes here so the
+## chosen level is set before the game state is initialised.
+label start_easy:
+    $ set_difficulty("easy")
+    jump start
+
+label start_medium:
+    $ set_difficulty("medium")
+    jump start
+
+label start_hard:
+    $ set_difficulty("hard")
+    jump start
+
+
 label start:
     $ reset_training()
     jump scene_intro
@@ -41,7 +56,7 @@ label scene_assessment:
     show screen vitals_button
 
     menu:
-        "Look at the vitals. Is this postpartum hemorrhage (PPH)?"
+        "Look at the vitals. Is this postpartum haemorrhage (PPH)?"
 
         "Yes — blood loss over 500mL with signs of shock.":
             call screen feedback(True, _("Correct"),
@@ -187,11 +202,12 @@ label scene_monitoring:
 
 label scene_quiz:
     show nurse writing at nurse_stand
-    dr "Maria is safe. Before we finish — a quick knowledge check. Five questions."
+    dr "Maria is safe. Before we finish — a quick knowledge check."
 
     $ quiz_index = 0
-    while quiz_index < 5:
-        $ q = QUIZ_QUESTIONS[quiz_index]
+    $ quiz_list = active_quiz()
+    while quiz_index < len(quiz_list):
+        $ q = quiz_list[quiz_index]
         call screen quiz_screen(quiz_index)
         if _return == q["correct"]:
             call screen feedback(True, _("Correct"), q["explain"])

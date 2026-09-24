@@ -365,7 +365,7 @@ screen main_menu():
         padding (36, 18)
         hbox:
             spacing 26
-            textbutton _("▶  Start") style "ubt_nav_button" text_size 32 action Start()
+            textbutton _("▶  Start") style "ubt_nav_button" text_size 32 action ShowMenu("difficulty_select")
             textbutton _("Preferences") style "ubt_nav_button" action ShowMenu("preferences")
             textbutton _("About") style "ubt_nav_button" action ShowMenu("about")
             textbutton _("Help") style "ubt_nav_button" action ShowMenu("help")
@@ -421,6 +421,59 @@ style main_menu_title:
 
 style main_menu_version:
     properties gui.text_properties("version")
+
+
+## Difficulty selection screen ################################################
+##
+## Shown when the player clicks Start on the main menu. Each level routes to its
+## matching entry label in script.rpy, which sets the difficulty before the game
+## state is initialised.
+
+screen difficulty_select():
+
+    tag menu
+
+    add "main_menu_bg"
+
+    frame:
+        background rpanel("#1e3a3a", alpha=0.82)
+        xalign 0.5
+        yalign 0.5
+        padding (60, 44)
+        vbox:
+            spacing 22
+            text _("Choose a difficulty") size 52 bold True color "#ffffff" xalign 0.5
+            null height 6
+
+            button:
+                style "ubt_button"
+                xsize 900
+                action Start("start_easy")
+                vbox:
+                    spacing 4
+                    text _("Easy") size 34 bold True color "#ffffff"
+                    text _("Gentle penalties, hints on wrong steps, fewer distractors, 3 quiz questions.") size 22 color "#E0F5F5"
+
+            button:
+                style "ubt_button"
+                xsize 900
+                action Start("start_medium")
+                vbox:
+                    spacing 4
+                    text _("Medium") size 34 bold True color "#ffffff"
+                    text _("Standard penalties and grading, some distractors, 5 quiz questions.") size 22 color "#E0F5F5"
+
+            button:
+                style "ubt_button"
+                xsize 900
+                action Start("start_hard")
+                vbox:
+                    spacing 4
+                    text _("Hard") size 34 bold True color "#ffffff"
+                    text _("Harsher penalties, no hints, all distractors, 7 quiz questions.") size 22 color "#E0F5F5"
+
+            null height 10
+            textbutton _("◀  Back") style "ubt_nav_button" action ShowMenu("main_menu") xalign 0.5
 
 
 ## Game Menu screen ############################################################

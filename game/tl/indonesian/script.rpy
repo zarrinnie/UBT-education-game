@@ -108,12 +108,6 @@ translate indonesian scene_monitoring_a9e8b89a:
     # "Monitoring plan confirmed. Maria remains stable. The balloon will stay in place for 24–48 hours, then be deflated gradually while watching for re-bleeding."
     "Rencana pemantauan dikonfirmasi. Kondisi Maria tetap stabil. Balon akan dipertahankan selama 24–48 jam, lalu dikempiskan secara bertahap sambil mengawasi perdarahan ulang."
 
-# game/script.rpy:190
-translate indonesian scene_quiz_532f7c4c:
-
-    # dr "Maria is safe. Before we finish — a quick knowledge check. Five questions."
-    dr "Maria selamat. Sebelum kita selesai — uji pengetahuan singkat. Lima pertanyaan."
-
 translate indonesian strings:
 
     # game/script.rpy:43
@@ -263,3 +257,11 @@ translate indonesian strings:
     # game/script.rpy:199
     old "Quiz Q%d: %s"
     new "Kuis soal %d: %s"
+# TODO: Translation updated at 2026-08-12 15:11
+
+# game/script.rpy:205
+translate indonesian scene_quiz_f6c098fb:
+
+    # dr "Maria is safe. Before we finish — a quick knowledge check."
+    dr "Maria sudah aman. Sebelum kita selesai — sedikit uji pengetahuan."
+

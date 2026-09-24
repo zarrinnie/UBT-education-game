@@ -223,7 +223,7 @@ screen equipment_prep():
             ypos 270
             add "ubt_tray"
 
-        for name in SHELF_ORDER:
+        for name in current_shelf():
             drag:
                 drag_name name
                 drag_raise True
@@ -335,9 +335,9 @@ screen monitoring_checklist():
 
 screen quiz_screen(index):
     add "bg exam"
-    $ q = QUIZ_QUESTIONS[index]
+    $ q = active_quiz()[index]
     $ qnum = index + 1
-    $ qtotal = len(QUIZ_QUESTIONS)
+    $ qtotal = len(active_quiz())
     frame:
         style "ubt_frame"
         xalign 0.5
@@ -366,6 +366,7 @@ screen results_screen():
         vbox:
             spacing 18
             text _("Training results") style "ubt_title"
+            text (__("Difficulty: ") + __(DIFFICULTY_LABEL[difficulty])) style "ubt_text" size 26
             text _("Final score: [score] / 100") style "ubt_text" size 36 bold True
             text (__("Grade: ") + __(grade_for(score))) size 40 bold True color grade_color(score)
             null height 8

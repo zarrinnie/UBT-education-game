@@ -13,29 +13,55 @@ default monitor_checked = []    # indices of checked monitoring items
 default inflate_volume = 0      # mL chosen on the inflation slider
 default proc_current = 0        # current procedure step (0-4)
 default quiz_index = 0
+default difficulty = "medium"   # "easy" | "medium" | "hard" — preserved across retries
 
 
 init -2 python:
+
+    ## ------------------------------------------------------------------
+    ## Difficulty
+    ## ------------------------------------------------------------------
+
+    ## Each level tunes four things: penalty size, grade thresholds, whether
+    ## procedure hints are shown, how many equipment distractors appear, and how
+    ## many quiz questions are asked.
+    DIFFICULTY = {
+        "easy":   {"penalty_mult": 0.5, "expert": 85, "pass": 60,
+                   "show_hints": True,  "distractors": 1, "quiz_count": 3},
+        "medium": {"penalty_mult": 1.0, "expert": 90, "pass": 70,
+                   "show_hints": True,  "distractors": 2, "quiz_count": 5},
+        "hard":   {"penalty_mult": 1.5, "expert": 95, "pass": 80,
+                   "show_hints": False, "distractors": 4, "quiz_count": 7},
+    }
+
+    DIFFICULTY_LABEL = {"easy": _("Easy"), "medium": _("Medium"), "hard": _("Hard")}
+
+    def diff_cfg(key):
+        return DIFFICULTY[store.difficulty][key]
+
+    def set_difficulty(name):
+        store.difficulty = name
 
     ## ------------------------------------------------------------------
     ## Scoring
     ## ------------------------------------------------------------------
 
     def deduct_score(reason, points):
+        points = max(1, int(round(points * diff_cfg("penalty_mult"))))
         store.score = max(0, store.score - points)
         store.score_log = store.score_log + [(reason, points)]
 
     def grade_for(score):
-        if score >= 90:
+        if score >= diff_cfg("expert"):
             return _("Expert")
-        if score >= 70:
+        if score >= diff_cfg("pass"):
             return _("Competent")
         return _("Needs Review")
 
     def grade_color(score):
-        if score >= 90:
+        if score >= diff_cfg("expert"):
             return "#2d7a4f"
-        if score >= 70:
+        if score >= diff_cfg("pass"):
             return "#b8860b"
         return "#7a2d2d"
 
@@ -76,13 +102,23 @@ init -2 python:
         "foley": _("A Foley catheter drains the bladder — its small balloon (about 30mL) cannot tamponade the uterus. You need the UBT balloon catheter, which holds 250–500mL."),
     }
 
-    ## Shelf mixes correct tools and distractors.
-    SHELF_ORDER = ["ubt_catheter", "forceps", "syringe", "episiotomy",
-                   "iv_saline", "suture_kit", "speculum", "foley",
-                   "clamps", "gloves"]
+    ## Distractors added to the shelf, in order — the difficulty level chooses
+    ## how many of these appear alongside the 6 correct tools.
+    DISTRACTOR_ORDER = ["forceps", "episiotomy", "suture_kit", "foley"]
+
+    def current_shelf():
+        """The shelf tools for the active difficulty: 6 correct tools mixed with
+        the first N distractors, interleaved so the layout still alternates."""
+        distractors = DISTRACTOR_ORDER[:diff_cfg("distractors")]
+        shelf = []
+        for i, name in enumerate(CORRECT_TOOLS):
+            shelf.append(name)
+            if i < len(distractors):
+                shelf.append(distractors[i])
+        return shelf
 
     def shelf_pos(name):
-        i = SHELF_ORDER.index(name)
+        i = current_shelf().index(name)
         col, row = i % 2, i // 2
         return (80 + col * 200, 190 + row * 150)
 
@@ -91,7 +127,7 @@ init -2 python:
     def init_equipment_positions():
         store.tools_on_tray = []
         store.tray_slot_of = {}
-        store.tool_pos = {name: shelf_pos(name) for name in SHELF_ORDER}
+        store.tool_pos = {name: shelf_pos(name) for name in current_shelf()}
 
     def equipment_dragged(drags, drop):
         """`dragged` callback for shelf tools on the equipment_prep screen."""
@@ -190,8 +226,13 @@ init -2 python:
         deduct_score(__("Procedure step %d: used %s instead of %s.") %
                      (step + 1, __(TOOL_LABELS[name]), __(TOOL_LABELS[correct])), 5)
         renpy.show_screen("red_flash")
+        # On easy/medium, prepend the step hint; on hard, show only the reason.
+        if diff_cfg("show_hints"):
+            body = __(PROC_STEPS[step]["hint"]) + "\n\n" + __(why)
+        else:
+            body = __(why)
         renpy.show_screen("feedback", False, _("Wrong tool"),
-                          __(PROC_STEPS[step]["hint"]) + "\n\n" + __(why), Hide("feedback"))
+                          body, Hide("feedback"))
         pos = proc_shelf_pos(name)
         tool.snap(pos[0], pos[1], 0.3)
         renpy.restart_interaction()
@@ -259,3 +300,32 @@ init -2 python:
             "fix": _("Tamponade test positive means bleeding stopped after inflation."),
         },
     ]
+
+    ## Extra questions asked only on Hard (appended after the base five).
+    QUIZ_ADVANCED = [
+        {
+            "q": _("If the tamponade test is negative — bleeding continues after inflation — what is the priority?"),
+            "options": [_("Add more saline until it stops"),
+                        _("Escalate urgently for surgical management"),
+                        _("Deflate and re-observe for an hour"),
+                        _("Give a second dose of oxytocin and wait")],
+            "correct": 1,
+            "explain": _("A negative tamponade test means UBT has not controlled the bleeding. Do not delay — escalate immediately for surgical management (e.g. laparotomy) while resuscitation continues."),
+            "fix": _("A negative tamponade test means escalate urgently for surgery — don't just add saline or wait."),
+        },
+        {
+            "q": _("While the balloon is in place, which of these should also be given?"),
+            "options": [_("Prophylactic antibiotics"),
+                        _("Nothing further is needed"),
+                        _("Immediate balloon deflation every hour"),
+                        _("Oral iron only")],
+            "correct": 0,
+            "explain": _("An indwelling uterine balloon is a foreign body, so prophylactic antibiotics are given to reduce infection risk while uterotonics and monitoring continue."),
+            "fix": _("Give prophylactic antibiotics while the balloon is in place."),
+        },
+    ]
+
+    def active_quiz():
+        """The quiz questions for the active difficulty: the base set, extended
+        with advanced questions, truncated to the level's quiz_count."""
+        return (QUIZ_QUESTIONS + QUIZ_ADVANCED)[:diff_cfg("quiz_count")]

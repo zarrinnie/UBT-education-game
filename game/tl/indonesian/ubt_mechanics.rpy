@@ -293,3 +293,63 @@ translate indonesian strings:
     # game/ubt_mechanics.rpy:222
     old "Tamponade test positive means bleeding stopped after inflation."
     new "Tes tamponade positif berarti perdarahan berhenti setelah inflasi."
+# TODO: Translation updated at 2026-08-12 15:11
+
+translate indonesian strings:
+
+    # game/ubt_mechanics.rpy:305
+    old "If the tamponade test is negative — bleeding continues after inflation — what is the priority?"
+    new "Jika tes tamponade negatif — perdarahan berlanjut setelah inflasi — apa prioritasnya?"
+
+    # game/ubt_mechanics.rpy:305
+    old "Add more saline until it stops"
+    new "Tambahkan salin sampai berhenti"
+
+    # game/ubt_mechanics.rpy:305
+    old "Escalate urgently for surgical management"
+    new "Rujuk segera untuk penanganan bedah"
+
+    # game/ubt_mechanics.rpy:305
+    old "Deflate and re-observe for an hour"
+    new "Kempiskan dan amati ulang selama satu jam"
+
+    # game/ubt_mechanics.rpy:305
+    old "Give a second dose of oxytocin and wait"
+    new "Beri dosis oksitosin kedua dan tunggu"
+
+    # game/ubt_mechanics.rpy:305
+    old "A negative tamponade test means UBT has not controlled the bleeding. Do not delay — escalate immediately for surgical management (e.g. laparotomy) while resuscitation continues."
+    new "Tes tamponade negatif berarti UBT belum mengendalikan perdarahan. Jangan menunda — segera rujuk untuk penanganan bedah (mis. laparotomi) sementara resusitasi terus berjalan."
+
+    # game/ubt_mechanics.rpy:305
+    old "A negative tamponade test means escalate urgently for surgery — don't just add saline or wait."
+    new "Tes tamponade negatif berarti segera rujuk untuk operasi — jangan hanya menambah salin atau menunggu."
+
+    # game/ubt_mechanics.rpy:305
+    old "While the balloon is in place, which of these should also be given?"
+    new "Selama balon terpasang, mana yang juga harus diberikan?"
+
+    # game/ubt_mechanics.rpy:305
+    old "Prophylactic antibiotics"
+    new "Antibiotik profilaksis"
+
+    # game/ubt_mechanics.rpy:305
+    old "Nothing further is needed"
+    new "Tidak perlu tindakan lain"
+
+    # game/ubt_mechanics.rpy:305
+    old "Immediate balloon deflation every hour"
+    new "Pengempisan balon setiap jam"
+
+    # game/ubt_mechanics.rpy:305
+    old "Oral iron only"
+    new "Hanya zat besi oral"
+
+    # game/ubt_mechanics.rpy:305
+    old "An indwelling uterine balloon is a foreign body, so prophylactic antibiotics are given to reduce infection risk while uterotonics and monitoring continue."
+    new "Balon uterus yang terpasang adalah benda asing, sehingga antibiotik profilaksis diberikan untuk mengurangi risiko infeksi sementara uterotonika dan pemantauan terus berjalan."
+
+    # game/ubt_mechanics.rpy:305
+    old "Give prophylactic antibiotics while the balloon is in place."
+    new "Berikan antibiotik profilaksis selama balon terpasang."
+

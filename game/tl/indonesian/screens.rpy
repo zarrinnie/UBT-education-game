@@ -337,3 +337,39 @@ translate indonesian strings:
     # game/screens.rpy:1567
     old "Menu"
     new "Menu"
+# TODO: Translation updated at 2026-08-12 15:11
+
+translate indonesian strings:
+
+    # game/screens.rpy:445
+    old "Choose a difficulty"
+    new "Pilih tingkat kesulitan"
+
+    # game/screens.rpy:454
+    old "Easy"
+    new "Mudah"
+
+    # game/screens.rpy:455
+    old "Gentle penalties, hints on wrong steps, fewer distractors, 3 quiz questions."
+    new "Penalti ringan, petunjuk saat langkah salah, lebih sedikit pengecoh, 3 soal kuis."
+
+    # game/screens.rpy:463
+    old "Medium"
+    new "Sedang"
+
+    # game/screens.rpy:464
+    old "Standard penalties and grading, some distractors, 5 quiz questions."
+    new "Penalti dan penilaian standar, beberapa pengecoh, 5 soal kuis."
+
+    # game/screens.rpy:472
+    old "Hard"
+    new "Sulit"
+
+    # game/screens.rpy:473
+    old "Harsher penalties, no hints, all distractors, 7 quiz questions."
+    new "Penalti lebih berat, tanpa petunjuk, semua pengecoh, 7 soal kuis."
+
+    # game/screens.rpy:476
+    old "◀  Back"
+    new "◀  Kembali"
+
